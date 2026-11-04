@@ -1,6 +1,6 @@
 //hassan bin asif
 #include <stdio.h>
-
+#include<string.h>
 int login()
 {
     int pin = 320;
@@ -26,9 +26,89 @@ int login()
     printf("Limit reached! Access denied.\n");
     return 0;
 }
+
+//Hassan Zakai in
+
+int flightids[100];
+char destinations[100][50];
+char flightdates[100][20];
+float flightfares[100];
+int flighttypes[100];
+int fcount=0;
+int nextflightid=101;
+void addflight(){
+    printf("\n---Add New Flight---\n");
+    flightids[fcount]= nextflightid;
+
+    printf("Enter Destination: ");
+    scanf("%s", destinations[fcount]);
+
+    printf("Enter Date (DD-MM-YYYY): ");
+    scanf("%s", flightdates[fcount]);
+
+    do {
+        printf("Enter Fare: ");
+        scanf("%f", &flightfares[fcount]);
+        if(flightfares[fcount] <= 0)
+            printf("Fare must be positive. Please try again.\n");
+} while (flightfares[fcount] <= 0);
+
+
+    do{
+        printf("Enter Type (Domestic / International): ");
+        scanf("%d",&flighttypes[fcount]);
+        if(flighttypes[fcount] != 1 && flighttypes[fcount] != 2)
+            printf("Invalid type. Please enter 1 for Domestic or 2 for International.\n");
+    } while (flighttypes[fcount] != 1 && flighttypes[fcount] != 2);
+    nextflightid++;
+    fcount++;
+
+    printf("\nFlight added successfully with ID: %d!\n", flightids[fcount - 1]);
+
+}
+void viewflights(){
+    printf("\n--- View Flights ---\n");
+    if(fcount == 0) {
+        printf("No flights available.\n");
+        return;
+     }
+     printf("-------------------------------------------------------------------\n");
+    printf("%-10s %-20s %-15s %-10s %-15s\n", "ID", "Destination", "Date", "Fare", "Type");
+    printf("-------------------------------------------------------------------\n");
+
+    for(int i=0; i<fcount; i++){
+        char typestr[15];
+        if(flighttypes[i] == 1)
+            strcpy(typestr, "Domestic");
+        else
+            strcpy(typestr, "International");
+
+            printf("%-10d %-20s %-15s %-10.2f %-15s\n", flightids[i], destinations[i], flightdates[i], flightfares[i], typestr);
+    }
+    printf("-------------------------------------------------------------------\n");
+}
+
+void flightmenu(){
+    int choice;
+    do{
+        printf("\n--- Flight Management Menu ---\n");
+        printf("1. Add Flight\n2. View Flights\n0. Back to Main Menu\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch(choice){
+            case 1: addflight(); break;
+            case 2: viewflights(); break;
+            case 0: printf("Returning to Main Menu...\n"); break;
+            default: printf("Invalid choice! Please try again.\n");
+        }
+    } while(choice != 0);
+}
+//Hassan Zakai out
+
 void showmenu(){
     printf("====MAIN MENU====\n");
-    printf("1. Manage Flights\n2. Manage Passengers\n3. Book Ticket\n4. Cancel Booking\n5. Seat Allocation\n6. Search\n7. Report\n8. Packages & Categories\n0. Exit\ngy");
+    printf("1. Manage Flights\n2. Manage Passengers\n3. Book Ticket\n4. Cancel Booking\n5. Seat Allocation\n6. Search\n7. Report\n8. Packages & Categories\n0. Exit\n");
     }
 int main(){
 int choice ;
@@ -37,22 +117,26 @@ int choice ;
 
     if (login() == 0)
         return 0;
+    do{
 
-    showmenu();
-    printf("Enter choice: ");
-     scanf("%d", &choice);
-    switch(choice)
-        {
-            case 1: printf("Flights - coming soon\n"); break;
-            case 2: printf("Passengers - coming soon\n"); break;
-            case 3: printf("Book Ticket - coming soon\n"); break;
-            case 4: printf("Cancel Booking - coming soon\n"); break;
-            case 5: printf("Seat Allocation - coming soon\n"); break;
-            case 6: printf("Search - coming soon\n"); break;
-            case 7: printf("Report - coming soon\n"); break;
-            case 8: printf("Packages - coming soon\n"); break;
-            case 0: printf("Goodbye!\n"); break;
-            default: printf("Wrong choice!\n");
-        }while(choice != 0);
+        showmenu();
+        printf("Enter choice: ");
+         scanf("%d", &choice);
+        switch(choice)
+            {
+                case 1: flightmenu(); break; //Hassan Zakai
+                case 2: printf("Passengers - coming soon\n"); break;
+                case 3: printf("Book Ticket - coming soon\n"); break;
+                case 4: printf("Cancel Booking - coming soon\n"); break;
+                case 5: printf("Seat Allocation - coming soon\n"); break;
+                case 6: printf("Search - coming soon\n"); break;
+                case 7: printf("Report - coming soon\n"); break;
+                case 8: printf("Packages - coming soon\n"); break;
+                case 0: printf("Goodbye!\n"); break;
+                default: printf("Wrong choice!\n");
+    }
+        } while(choice != 0);
+        
+        return 0;
     }
     //hassan bin asif
