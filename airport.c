@@ -36,15 +36,16 @@ float flightfares[100];
 int flighttypes[100];
 int fcount=0;
 int nextflightid=101;
+
 void addflight(){
     printf("\n---Add New Flight---\n");
     flightids[fcount]= nextflightid;
 
     printf("Enter Destination: ");
-    scanf("%s", destinations[fcount]);
+    scanf(" %[^\n]", destinations[fcount]);
 
     printf("Enter Date (DD-MM-YYYY): ");
-    scanf("%s", flightdates[fcount]);
+    scanf(" %[^\n]", flightdates[fcount]);
 
     do {
         printf("Enter Fare: ");
@@ -72,9 +73,7 @@ void viewflights(){
         printf("No flights available.\n");
         return;
      }
-     printf("-------------------------------------------------------------------\n");
     printf("%-10s %-20s %-15s %-10s %-15s\n", "ID", "Destination", "Date", "Fare", "Type");
-    printf("-------------------------------------------------------------------\n");
 
     for(int i=0; i<fcount; i++){
         char typestr[15];
@@ -85,20 +84,89 @@ void viewflights(){
 
             printf("%-10d %-20s %-15s %-10.2f %-15s\n", flightids[i], destinations[i], flightdates[i], flightfares[i], typestr);
     }
-    printf("-------------------------------------------------------------------\n");
 }
+//Hassan Zakai Day 2 start
+int findflight(int id){
+    
+    for(int i=0; i<fcount; i++){
+        if(flightids[i] == id)
+            return i;
+    }
+    return -1;
+}
+
+void updateflight(){
+int id, i;
+printf("\n--- Update Flight Details ---\n");
+printf("Enter Flight ID to Update: ");
+scanf("%d",&id);
+i=findflight(id);
+if(i==-1){
+    printf("Flight with ID %d not found!\n", id);
+    return;
+
+}
+printf("Enter New Destination: ");
+scanf(" %[^\n]", destinations[i]);
+
+printf("Enter New Date (DD-MM-YYYY): ");
+scanf(" %[^\n]", flightdates[i]);
+
+do{
+    printf("Enter New Fare: ");
+    scanf("%f",&flightfares[i]);
+    if(flightfares[i] <= 0){
+        printf("Fare must be positive. Please try again.\n");
+    }
+} while(flightfares[i] <= 0);
+
+do{
+    printf("Enter New Type (1 = Domestic, 2 = International): ");
+    scanf("%d",&flighttypes[i]);
+    if(flighttypes[i] != 1 && flighttypes[i] != 2){
+        printf("Invalid type. Please enter 1 for Domestic or 2 for International.\n");
+    }
+} while (flighttypes[i] != 1 && flighttypes[i] != 2);
+
+printf("\nFlight Updated Successfully!\n");
+}
+
+void deleteflight(){
+    int id, i, j;
+    printf("\n--- Delete Flight ---\n");
+    printf("Enter Flight ID to delete: ");
+    scanf("%d", &id);
+    i = findflight(id);
+    if(i == -1){
+        printf("Flight Not Found!\n");
+        return;
+    }
+    for(j=i; j<fcount-1; j++){
+        flightids[j] = flightids[j+1];
+        strcpy(destinations[j], destinations[j+1]);
+        strcpy(flightdates[j], flightdates[j+1]);
+        flightfares[j] = flightfares[j+1];
+        flighttypes[j] = flighttypes[j+1];
+    }
+    fcount--;
+    printf("Flight deleted successfully!\n");
+
+}
+//Hassan Zakai Day 2 End
 
 void flightmenu(){
     int choice;
     do{
         printf("\n--- Flight Management Menu ---\n");
-        printf("1. Add Flight\n2. View Flights\n0. Back to Main Menu\n");
+        printf("1. Add Flight\n2. View Flights\n3. Update Flight\n4. Delete Flight\n0. Back to Main Menu\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
         switch(choice){
             case 1: addflight(); break;
             case 2: viewflights(); break;
+            case 3: updateflight(); break;
+            case 4: deleteflight(); break;
             case 0: printf("Returning to Main Menu...\n"); break;
             default: printf("Invalid choice! Please try again.\n");
         }
