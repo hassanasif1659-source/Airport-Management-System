@@ -235,6 +235,7 @@ int choice ;
 
     if (login() == 0)
         return 0;
+            loadcounters();
     do{
 
         showmenu();
@@ -242,15 +243,15 @@ int choice ;
          scanf("%d", &choice);
         switch(choice)
             {
-                case 1: flightmenu(); break; //Hassan Zakai
-                case 2: passengerMenu(); break; // Ahmed Day 1
+                case 1: flightmenu(); saveCounters(); break; //Hassan Zakai
+                case 2: passengerMenu(); saveCounters(); break; // Ahmed Day 1
                 case 3: printf("Book Ticket - coming soon\n"); break;
                 case 4: printf("Cancel Booking - coming soon\n"); break;
                 case 5: printf("Seat Allocation - coming soon\n"); break;
                 case 6: printf("Search - coming soon\n"); break;
                 case 7: printf("Report - coming soon\n"); break;
                 case 8: printf("Packages - coming soon\n"); break;
-                case 0: printf("Goodbye!\n"); break;
+                case 0: saveCounters(); printf("Goodbye!\n"); break;
                 default: printf("Wrong choice!\n");
     }
         } while(choice != 0);
