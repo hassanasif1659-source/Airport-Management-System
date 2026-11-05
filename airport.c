@@ -201,6 +201,29 @@ void passengerMenu()
 }
 // Ahmed Day 1 end
 
+
+//Hassan Asif Day 2 start
+void saveCounters(){
+    FILE *fp;
+    fp = fopen("counters.txt", "w");
+    if(fp==NULL){
+        printf("Error Saving File ! \n");
+        return ; 
+    }
+    fprintf(fp, "%d %d", nextflightid, nextPaxId);
+    fclose(fp);
+}
+void loadcounters(){
+    FILE *fp ;
+    fp = fopen("counters.txt", "r");
+    if(fp==NULL){
+        return ; 
+    }
+    fscanf(fp , "%d %d" ,&nextflightid , &nextPaxId);
+    fclose(fp);
+}
+//Hassan Asif Day 2 completed
+
 void showmenu(){
     printf("====MAIN MENU====\n");
     printf("1. Manage Flights\n2. Manage Passengers\n3. Book Ticket\n4. Cancel Booking\n5. Seat Allocation\n6. Search\n7. Report\n8. Packages & Categories\n0. Exit\n");
