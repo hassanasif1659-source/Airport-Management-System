@@ -55,7 +55,7 @@ void addflight(){
 
 
     do{
-        printf("Enter Type (Domestic / International): ");
+        printf("Enter Type (1 for Domestic / 2 for International): ");
         scanf("%d",&flighttypes[fcount]);
         if(flighttypes[fcount] != 1 && flighttypes[fcount] != 2)
             printf("Invalid type. Please enter 1 for Domestic or 2 for International.\n");
