@@ -203,6 +203,7 @@ void passengerMenu()
 
 
 //Hassan Asif Day 2 start
+//I add two functions savecounters and loadcounters which save the ids in file .
 void saveCounters(){
     FILE *fp;
     fp = fopen("counters.txt", "w");
@@ -222,6 +223,7 @@ void loadcounters(){
     fscanf(fp , "%d %d" ,&nextflightid , &nextPaxId);
     fclose(fp);
 }
+//I add two functions savecounters and loadcounters which save the ids in file .
 //Hassan Asif Day 2 completed
 
 void showmenu(){
