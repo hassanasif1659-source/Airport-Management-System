@@ -181,6 +181,9 @@ int paxAge[100];
 char paxCnic[100][20];
 int pCount = 0, nextPaxId = 1001;
 
+char catName[4][20] = {"Child", "Student", "Adult", "Senior Citizen"}; // Day 2 variables
+int getCategory(int age); // Day 2 variables
+
 void addPassenger()
 {
     if (pCount >= 100)
@@ -209,8 +212,8 @@ void addPassenger()
 
     } while (paxAge[pCount] < 1 || paxAge[pCount] > 120);
 
-    printf("\nPassenger added successfully! ID: %d\n", paxID[pCount]);
-
+    // printf("\nPassenger added successfully! ID: %d\n", paxID[pCount]);
+    printf("\nPassenger added successfully! ID: %d | Category: %s\n",paxID[pCount], catName[getCategory(paxAge[pCount])]); // Modified the above line on day 2
     pCount = pCount + 1;
     nextPaxId = nextPaxId + 1;
 }
@@ -225,19 +228,81 @@ void viewPassengers()
         return  ;
     }
 
-    printf("---------------------------------------------------------------\n");
-    printf("%-10s %-25s %-20s %-10s\n", "ID", "Name", "CNIC", "Age");
-    printf("---------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------\n");
+    // printf("%-10s %-25s %-20s %-10s\n", "ID", "Name", "CNIC", "Age");
+    printf("%-10s %-25s %-20s %-10s %-20s\n", "ID", "Name", "CNIC", "Age", "Category"); // Modified the above line on day 2
+    printf("-----------------------------------------------------------------------------------\n");
 
     for (int i = 0; i < pCount; i++)
     {
-        printf("%-10d %-25s %-20s %-10d\n",
-               paxID[i], paxName[i], paxCnic[i], paxAge[i]);
+        // printf("%-10d %-25s %-20s %-10d\n",paxID[i], paxName[i], paxCnic[i], paxAge[i]);
+        printf("%-10d %-25s %-20s %-10d %-20s\n", 
+       paxID[i], paxName[i], paxCnic[i], paxAge[i],
+       catName[getCategory(paxAge[i])]); // Modified the above printf line on day 2
     }
 
-    printf("---------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------\n");
+}
+// Ahmed Day 2 Start
+int getCategory(int age)
+{
+    if (age < 12)
+        return 0;
+    else if (age <= 25)
+        return 1;
+    else if (age <= 59)
+        return 2;
+    else
+        return 3;
 }
 
+int findPassenger(int id)
+{
+    for (int i = 0; i < pCount; i++)
+    {
+        if (paxID[i] == id)
+            return i;
+    }
+
+    return -1;
+}
+
+void updatePassenger()
+{
+    int id, i;
+
+    printf("\n--- Update Passenger ---\n");
+    printf("Enter Passenger ID: ");
+    scanf("%d", &id);
+
+    i = findPassenger(id);
+
+    if (i == -1)
+    {
+        printf("Passenger not found!\n");
+        return;
+    }
+
+    printf("Enter New Name: ");
+    scanf(" %49[^\n]", paxName[i]);
+
+    printf("Enter New CNIC: ");
+    scanf("%19s", paxCnic[i]);
+
+    do
+    {
+        printf("Enter New Age: ");
+        scanf("%d", &paxAge[i]);
+
+        if (paxAge[i] < 1 || paxAge[i] > 120)
+            printf("Invalid age! Please enter age between 1 and 120.\n");
+
+    } while (paxAge[i] < 1 || paxAge[i] > 120);
+
+    printf("\nPassenger updated successfully!\n");
+    printf("New Category: %s\n", catName[getCategory(paxAge[i])]);
+}
+// Ahmed Day 2 End
 void passengerMenu()
 {
     int choice;
@@ -247,6 +312,7 @@ void passengerMenu()
         printf("\n--- Passenger Management Menu ---\n");
         printf("1. Add Passenger\n");
         printf("2. View Passengers\n");
+        printf("3. Update Passenger\n");
         printf("0. Back to Main Menu\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
@@ -258,6 +324,9 @@ void passengerMenu()
                 break;
             case 2:
                 viewPassengers();
+                break;
+            case 3:
+                updatePassenger();
                 break;
             case 0:
                 printf("Returning to Main Menu...\n");
