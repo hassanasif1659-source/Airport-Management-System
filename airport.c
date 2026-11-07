@@ -303,6 +303,92 @@ void updatePassenger()
     printf("New Category: %s\n", catName[getCategory(paxAge[i])]);
 }
 // Ahmed Day 2 End
+
+// Ahmed Day 3 Start
+char pkgName[4][15] = {"", "Economy", "Business", "First Class"};
+int pkgMulti[4] = {0, 1, 2, 3};
+int pkgBaggage[4] = {0, 0, 10, 20};
+int catDiscount[4] = {50, 10, 0, 15};
+
+int choosePackage()
+{
+    int pkg;
+
+    printf("\n--- Available Packages ---\n");
+
+    for (int i = 1; i <= 3; i++)
+    {
+        printf("%d. %s | Fare x%d | Baggage: %d kg\n",
+               i, pkgName[i], pkgMulti[i], 20 + pkgBaggage[i]);
+    }
+
+    do
+    {
+        printf("Enter package (1-3): ");
+        scanf("%d", &pkg);
+
+        if (pkg < 1 || pkg > 3)
+            printf("Invalid package!\n");
+
+    } while (pkg < 1 || pkg > 3);
+
+    return pkg;
+}
+
+void calculateFare(float base, int pkg, int age, float *discount, float *finalFare)
+{
+    float packageFare;
+    int category;
+
+    packageFare = base * pkgMulti[pkg];
+
+    category = getCategory(age);
+
+    *discount = packageFare * catDiscount[category] / 100;
+
+    *finalFare = packageFare - *discount;
+}
+
+void showPackages()
+{
+    printf("\n========== TRAVEL PACKAGES ==========\n");
+
+    for (int i = 1; i <= 3; i++)
+    {
+        printf("%d. %s | Fare x%d | Baggage Limit: %d kg\n",
+               i, pkgName[i], pkgMulti[i], 20 + pkgBaggage[i]);
+    }
+
+    printf("\n========== AGE CATEGORIES ==========\n");
+
+    for (int i = 0; i < 4; i++)
+    {
+        printf("%s | Discount: %d%%\n", catName[i], catDiscount[i]);
+    }
+
+    printf("\nExcess baggage: Rs 500/kg Domestic, Rs 1000/kg International\n");
+
+    // Temporary Fare Test
+
+    float base, discount, finalFare;
+    int age, pkg;
+
+    printf("\n========== FARE CALCULATOR ==========\n");
+
+    printf("Enter Base Fare: ");
+    scanf("%f", &base);
+
+    printf("Enter Age: ");
+    scanf("%d", &age);
+
+    pkg = choosePackage();
+
+    calculateFare(base, pkg, age, &discount, &finalFare);
+
+    printf("\nDiscount: Rs %.2f\n", discount);
+    printf("Final Fare: Rs %.2f\n", finalFare);
+}
+// Ahmed Day 3 End
 void passengerMenu()
 {
     int choice;
@@ -452,7 +538,7 @@ int choice ;
                 case 5: printf("Seat Allocation - coming soon\n"); break;
                 case 6: printf("Search - coming soon\n"); break;
                 case 7: printf("Report - coming soon\n"); break;
-                case 8: printf("Packages - coming soon\n"); break;
+                case 8: showPackages(); break;
                 case 0: saveCounters(); printf("Goodbye!\n"); break;
                 default: printf("Wrong choice!\n");
     }
