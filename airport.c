@@ -88,6 +88,7 @@ void viewflights()
     }
     printf("%-10s %-20s %-15s %-10s %-15s\n", "ID", "Destination", "Date", "Fare", "Type");
 
+
     for (int i = 0; i < fcount; i++)
     {
         char typestr[15];
