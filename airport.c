@@ -341,6 +341,10 @@ void passengerMenu()
 
 //Hassan Asif Day 2 start
 //I add two functions savecounters and loadcounters which save the ids in file .
+
+int nextbookingID = 5001 ;
+
+
 void saveCounters(){
     FILE *fp;
     fp = fopen("counters.txt", "w");
@@ -348,7 +352,7 @@ void saveCounters(){
         printf("Error Saving File ! \n");
         return ; 
     }
-    fprintf(fp, "%d %d", nextflightid, nextPaxId);
+    fprintf(fp, "%d %d %d", nextflightid, nextPaxId,nextbookingID);
     fclose(fp);
 }
 void loadcounters(){
@@ -357,11 +361,70 @@ void loadcounters(){
     if(fp==NULL){
         return ; 
     }
-    fscanf(fp , "%d %d" ,&nextflightid , &nextPaxId);
+    fscanf(fp , "%d %d %d" ,&nextflightid , &nextPaxId,&nextbookingID);
     fclose(fp);
 }
 //I add two functions savecounters and loadcounters which save the ids in file .
 //Hassan Asif Day 2 completed
+
+//Hassan Asif Day 3 start
+int bookingId[200];
+int bookingpax[200];
+int bookingflight[200];
+float bookingfare[200];
+int bookingstatus[200];
+int bcount = 0;
+
+void bookticket(){
+    int pid ;
+    int fid ;
+    int p;
+    int f ;
+
+printf("\n****Book Ticket****\n");
+if(pCount==0 || fcount==0){
+    printf("Add a flight & Passenger \n");
+    return ;
+}
+printf("Enter passenger ID :");
+scanf("%d" , &pid);
+p  = findPassenger(pid);
+if(p==-1){
+    printf("Passenger not found!\n");
+    return ;
+}
+printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catName[getCategory(paxAge[p])]);
+// flight input
+    printf("Enter Flight ID: ");
+    scanf("%d" , &fid);
+    f = findflight(fid);
+    if(f==-1){
+        printf("Flight not found!\n");
+        return ;
+    }
+    printf("Flight: %s | Date: %s | Fare: Rs %.2f\n", destinations[f], flightdates[f], flightfares[f]);
+
+    // booking save karo
+    bookingId[bcount] = nextbookingID;
+    bookingpax[bcount] = pid;
+    bookingflight[bcount] = fid;
+    bookingfare[bcount] = flightfares[f];
+    bookingstatus[bcount] = 1;
+
+    // ticket print karo
+    printf("\n========== TICKET ==========\n");
+    printf("Booking ID : %d\n", bookingId[bcount]);
+    printf("Passenger  : %s\n", paxName[p]);
+    printf("Flight     : %d to %s\n", fid, destinations[f]);
+    printf("Date       : %s\n", flightdates[f]);
+    printf("Fare       : Rs %.2f\n", bookingfare[bcount]);
+    printf("Status     : Confirmed\n");
+    printf("============================\n");
+
+    nextbookingID++;
+    bcount++;
+}
+//Hassan Asif Day 3 end
 
 void showmenu(){
     printf("====MAIN MENU====\n");
@@ -384,7 +447,7 @@ int choice ;
             {
                 case 1: flightmenu(); saveCounters(); break; //Hassan Zakai
                 case 2: passengerMenu(); saveCounters(); break; // Ahmed Day 1
-                case 3: printf("Book Ticket - coming soon\n"); break;
+                case 3: bookticket(); saveCounters(); break;
                 case 4: printf("Cancel Booking - coming soon\n"); break;
                 case 5: printf("Seat Allocation - coming soon\n"); break;
                 case 6: printf("Search - coming soon\n"); break;
