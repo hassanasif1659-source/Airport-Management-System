@@ -249,6 +249,10 @@ void allocateseat(int f, int *row, int *col){
     printf("Seat %d%c allocated successfully!\n",r,c);
 }
 
+//Hassan Zakai Day 4 Start
+void releaseseat(int f,int row, int col){
+    seats[f][row][col];
+}
 void seatmenu(){
     int choice;
     do{
@@ -288,6 +292,8 @@ void seatmenu(){
     } while(choice != 0);
     }
 //Hassan Zakai Day 3 End
+
+
 void flightmenu()
 {
     int choice;
