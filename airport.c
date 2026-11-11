@@ -608,11 +608,44 @@ float bookingfare[200];
 int bookingstatus[200];
 int bcount = 0;
 
+//Hassan Asif Day 4 start
+int bookingpkg[200];
+int bookingrow[200];
+int bookingcol[200];
+float bookingdiscount[200];
+float bookingweight[200];
+float bookingfee[200];
+float bookingtotal[200];
+
+void printReceipt(int b)
+{
+    int p = findPassenger(bookingpax[b]);
+    int f = findflight(bookingflight[b]);
+
+    printf("\n========== TICKET RECEIPT ==========\n");
+    printf("Booking ID   : %d\n", bookingId[b]);
+    printf("Passenger    : %s\n", paxName[p]);
+    printf("Category     : %s\n", catName[getCategory(paxAge[p])]);
+    printf("Flight       : %d to %s\n", bookingflight[b], destinations[f]);
+    printf("Date         : %s\n", flightdates[f]);
+    printf("Package      : %s\n", pkgName[bookingpkg[b]]);
+    printf("Seat         : %d%c\n", bookingrow[b] + 1, 'A' + bookingcol[b]);
+    printf("Discount     : Rs %.2f\n", bookingdiscount[b]);
+    printf("Ticket Price : Rs %.2f\n", bookingfare[b]);
+    printf("Baggage      : %.1f kg (Limit %d kg)\n", bookingweight[b], 20 + pkgBaggage[bookingpkg[b]]);
+    printf("Excess Fee   : Rs %.2f\n", bookingfee[b]);
+    printf("TOTAL        : Rs %.2f\n", bookingtotal[b]);
+    printf("Status       : %s\n", bookingstatus[b] == 1 ? "Confirmed" : "Cancelled");
+    printf("--------------------------\n");
+}
+
 void bookticket(){
     int pid ;
     int fid ;
     int p;
     int f ;
+    int pkg;                                      // Day 4
+    float discount, fare, weight, limit, excess, fee;   // Day 4
 
 printf("\n****Book Ticket****\n");
 if(pCount==0 || fcount==0){
@@ -637,26 +670,54 @@ printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catNam
     }
     printf("Flight: %s | Date: %s | Fare: Rs %.2f\n", destinations[f], flightdates[f], flightfares[f]);
 
+    // Day 4: flight full check
+    if(countfreeseats(f) == 0){
+        printf("Flight is full!\n");
+        return ;
+    }
+
+    // Day 4: package (Ahmed)
+    pkg = choosePackage();
+
+    // Day 4: fare with age discount (Ahmed) - pointers
+    calculateFare(flightfares[f], pkg, paxAge[p], &discount, &fare);
+
+    // Day 4: seat (Zakai) - pointers
+    allocateseat(f, &bookingrow[bcount], &bookingcol[bcount]);
+
+    // Day 4: baggage
+    do{
+        printf("Enter baggage weight (kg): ");
+        scanf("%f", &weight);
+        if(weight < 0)
+            printf("Weight cannot be negative!\n");
+    } while(weight < 0);
+
+    limit = 20 + pkgBaggage[pkg];
+    excess = (weight > limit) ? weight - limit : 0;
+    fee = excess * ((flighttypes[f] == 1) ? 500 : 1000);
+    printf("Limit %.0f kg | Excess %.1f kg | Fee Rs %.2f\n", limit, excess, fee);
+
     // booking save karo
     bookingId[bcount] = nextbookingID;
     bookingpax[bcount] = pid;
     bookingflight[bcount] = fid;
-    bookingfare[bcount] = flightfares[f];
+    bookingfare[bcount] = fare;
     bookingstatus[bcount] = 1;
+    bookingpkg[bcount] = pkg;
+    bookingdiscount[bcount] = discount;
+    bookingweight[bcount] = weight;
+    bookingfee[bcount] = fee;
+    bookingtotal[bcount] = fare + fee;
 
-    // ticket print karo
-    printf("\n========== TICKET ==========\n");
-    printf("Booking ID : %d\n", bookingId[bcount]);
-    printf("Passenger  : %s\n", paxName[p]);
-    printf("Flight     : %d to %s\n", fid, destinations[f]);
-    printf("Date       : %s\n", flightdates[f]);
-    printf("Fare       : Rs %.2f\n", bookingfare[bcount]);
-    printf("Status     : Confirmed\n");
-    printf("============================\n");
+    // receipt print karo
+    printReceipt(bcount);
 
     nextbookingID++;
     bcount++;
 }
+//Hassan Asif Day 4 end
+
 //Hassan Asif Day 3 end
 
 void showmenu()
