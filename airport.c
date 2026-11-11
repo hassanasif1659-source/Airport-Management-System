@@ -250,8 +250,8 @@ void allocateseat(int f, int *row, int *col){
 }
 
 //Hassan Zakai Day 4 Start
-void releaseseat(int f,int row, int col)=0{
-    seats[f][row][col];
+void releaseseat(int f,int row, int col){
+    seats[f][row][col]=0;
 }
 void changeseat();
 
