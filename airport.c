@@ -200,10 +200,10 @@ int countfreeseats(int f) //counts free seats
 
 void seatmap(int f){
     printf("--- Seat Map for Flight ID: %d ---\n", flightids[f]);
-    printf("    A   B   C   D\n");
+    printf("         A   B   C   D\n");
 
     for(int row = 0; row < 10; row++){
-        printf("Row %d: ", row + 1);
+        printf("Row %2d: ", row + 1);
         for(int col = 0; col < 4; col++){
             if(seats[f][row][col] == 0){
                 printf("[ ] "); //free
