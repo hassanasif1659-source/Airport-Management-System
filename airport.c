@@ -253,19 +253,21 @@ void allocateseat(int f, int *row, int *col){
 void releaseseat(int f,int row, int col){
     seats[f][row][col];
 }
+void changeseat();
+
+// Hassan Zakai Day 4 End
 void seatmenu(){
     int choice;
     do{
         printf("\n--- Seat Management Menu ---\n");
         printf("1. View Seat Map\n");
-        printf("2. Book a Seat (Test Mode)\n");
+        printf("2. Change Seat\n");
         printf("0. Back to Main Menu\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
         switch(choice){
-            case 1:
-            case 2: {
+            case 1:{
                 int id, f;
                 printf("Enter Flight ID: ");
                 scanf("%d", &id);
@@ -274,16 +276,13 @@ void seatmenu(){
                     printf("Flight Not Found!\n");
                     break;
                 }
-                if(choice == 1){
-                    seatmap(f);
-                }
-                else{
-                    int assignedrow, assignedcol;
-                    allocateseat(f,&assignedrow,&assignedcol);
-                }
+                seatmap(f);
                 break;
             }
-            case 0:
+           case 2:
+                changeseat();
+                break;
+                case 0:
                 printf("Returning to Main Menu...\n");
                 break;
                 default:
@@ -292,7 +291,6 @@ void seatmenu(){
     } while(choice != 0);
     }
 //Hassan Zakai Day 3 End
-
 
 void flightmenu()
 {
@@ -725,6 +723,41 @@ printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catNam
 //Hassan Asif Day 4 end
 
 //Hassan Asif Day 3 end
+// Hassan Zakai Day 4 (change seat)
+void changeseat() {
+    int id, b = -1, f, oldrow, oldcol;
+    printf("\n--- Change Seat ---\n");
+    printf("Enter Booking ID: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < bcount; i++) {
+        if (bookingId[i] == id && bookingstatus[i] == 1) {
+            b = i;
+            break;
+        }
+    }
+
+    if (b == -1) {
+        printf("Booking not found!\n");
+        return;
+    }
+
+    f = findflight(bookingflight[b]);
+    
+    oldrow = bookingrow[b];
+    oldcol = bookingcol[b];
+
+    printf("Current seat: %d%c\n", oldrow + 1, 'A' + oldcol);
+
+    allocateseat(f, &bookingrow[b], &bookingcol[b]);
+
+    releaseseat(f, oldrow, oldcol);
+
+    printf("Seat changed from %d%c to %d%c!\n", 
+           oldrow + 1, 'A' + oldcol, 
+           bookingrow[b] + 1, 'A' + bookingcol[b]);
+}
+//Hassan Zakai Day 4 End
 
 void showmenu()
 {
