@@ -500,6 +500,20 @@ void calculateFare(float base, int pkg, int age, float *discount, float *finalFa
 
     *finalFare = packageFare - *discount;
 }
+// Ahmed Day 4 Start
+
+void calculateBaggage(float weight, int pkg, int type, float *limit, float *excess, float *fee)
+{
+    int rate;
+
+    *limit = 20 + pkgBaggage[pkg];
+
+    *excess = (weight > *limit) ? weight - *limit : 0;
+
+    rate = (type == 1) ? 500 : 1000;
+
+    *fee = *excess * rate;
+}
 
 void showPackages()
 {
@@ -522,23 +536,27 @@ void showPackages()
 
     // Temporary Fare Test
 
-    float base, discount, finalFare;
-    int age, pkg;
+    // float base, discount, finalFare;
+    // int age, pkg;
 
-    printf("\n========== FARE CALCULATOR ==========\n");
+    // printf("\n========== FARE CALCULATOR ==========\n");
 
-    printf("Enter Base Fare: ");
-    scanf("%f", &base);
+    // printf("Enter Base Fare: ");
+    // scanf("%f", &base);
 
-    printf("Enter Age: ");
-    scanf("%d", &age);
+    // printf("Enter Age: ");
+    // scanf("%d", &age);
 
-    pkg = choosePackage();
+    // pkg = choosePackage();
 
-    calculateFare(base, pkg, age, &discount, &finalFare);
+    // calculateFare(base, pkg, age, &discount, &finalFare);
 
-    printf("\nDiscount: Rs %.2f\n", discount);
-    printf("Final Fare: Rs %.2f\n", finalFare);
+    // printf("\nDiscount: Rs %.2f\n", discount);
+    // printf("Final Fare: Rs %.2f\n", finalFare);
+
+    // Deleted Temp fare test on Ahmed Day 4
+
+// Ahmed Day 4 End
 }
 // Ahmed Day 3 End
 void passengerMenu()
@@ -697,9 +715,11 @@ printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catNam
             printf("Weight cannot be negative!\n");
     } while(weight < 0);
 
-    limit = 20 + pkgBaggage[pkg];
-    excess = (weight > limit) ? weight - limit : 0;
-    fee = excess * ((flighttypes[f] == 1) ? 500 : 1000);
+    // limit = 20 + pkgBaggage[pkg];
+    // excess = (weight > limit) ? weight - limit : 0;
+    // fee = excess * ((flighttypes[f] == 1) ? 500 : 1000);
+    // Replacing the above 3 lines with below line on Ahmed Day 4 as commanded
+    calculateBaggage(weight, pkg, flighttypes[f], &limit, &excess, &fee);
     printf("Limit %.0f kg | Excess %.1f kg | Fee Rs %.2f\n", limit, excess, fee);
 
     // booking save karo
