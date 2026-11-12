@@ -292,6 +292,83 @@ void seatmenu(){
     }
 //Hassan Zakai Day 3 End
 
+//Hassan Zakai Day 5 Start
+void searchflight(){
+    int choice, id, i;
+    int found = 0;
+    char dest[50];
+
+    printf("\n--- Search Flight ---\n");
+    printf("1. By Flight ID\n");
+    printf("2. By Destination\n");
+    printf("Enter choice: ");
+    scanf("%d", &choice);
+
+    switch(choice){
+        case 1:
+        printf("Enter Flight ID: ");
+        scanf("%d", &id);
+        i = findflight(id);
+        if(i != -1){
+            printf("ID: %d | Destination: %s | Date: %s | Fare: %.2f | Type: %s | Free Seats: %d\n", flightids[i], destinations[i], flightdates[i], flightfares[i], (flighttypes[i] == 1) ? "Domestic" : "International", countfreeseats(i));
+            found = 1;
+        }
+        break;
+        case 2:
+        printf("Enter Destination: ");
+        scanf(" %[^\n]", dest);
+
+        for(int i=0;i<fcount;i++){
+            if(strcmp(destinations[i],dest)==0){
+                printf("ID: %d | Destination: %s | Date: %s | Fare: %.2f | Type: %s | Free Seats: %d\n", flightids[i], destinations[i], flightdates[i], flightfares[i], (flighttypes[i] == 1) ? "Domestic" : "International", countfreeseats(i));
+                found = 1;
+            }
+        }
+        break;
+        default:
+        printf("Invalid choice!\n");
+        return;
+    }
+    if(found==0){
+        printf("No flight found.\n");
+    }
+
+}
+
+//Hassan Zakai Day 5 End
+
+//Hassan Zakai Day 6 Start
+void saveflights(){
+    FILE *fp;
+    fp=fopen("flights.txt","w");
+    
+    if(fp==NULL){
+        return;
+    }
+    for(int i=0;i<fcount;i++){
+        fprintf(fp,"%d|%s|%s|%.2f|%d\n", flightids[i], destinations[i], flightdates[i], flightfares[i], flighttypes[i]);
+    }
+    fclose(fp);
+}
+
+void loadflights(){
+    FILE *fp;
+    fp= fopen("flights.txt","r");
+    if(fp==NULL){
+        return;
+    }
+    while(fcount<100 && fscanf(fp,"%d|%49[^|]|%19[^|]|%f|%d\n", &flightids[fcount], destinations[fcount], flightdates[fcount], &flightfares[fcount], &flighttypes[fcount])==5){
+        for(int row=0;row<10;row++){
+            for(int col=0;col<4;col++){
+                seats[fcount][row][col]=0;
+            }
+        }
+        fcount++;
+    }
+    fclose(fp);
+}
+
+//Hassan Zakai Day 6 End
 
 void flightmenu()
 {
