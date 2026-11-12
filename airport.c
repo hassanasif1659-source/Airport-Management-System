@@ -779,6 +779,162 @@ void changeseat() {
 }
 //Hassan Zakai Day 4 End
 
+//Hassan Asif Day 5 start
+int findbooking(int id)
+{
+    for (int i = 0; i < bcount; i++)
+    {
+        if (bookingId[i] == id)
+            return i;
+    }
+    return -1;
+}
+
+void cancelbooking()
+{
+    int id, b, f;
+
+    printf("\n--- Cancel Booking ---\n");
+    printf("Enter Booking ID: ");
+    scanf("%d", &id);
+
+    b = findbooking(id);
+    if (b == -1 || bookingstatus[b] == 0)
+    {
+        printf("Booking not found or already cancelled!\n");
+        return;
+    }
+
+    f = findflight(bookingflight[b]);
+    if (f != -1)
+        seats[f][bookingrow[b]][bookingcol[b]] = 0;   // seat free
+
+    bookingstatus[b] = 0;                              // cancelled
+    printf("Booking %d cancelled! Seat %d%c is free now.\n",
+           id, bookingrow[b] + 1, 'A' + bookingcol[b]);
+}
+
+void searchbooking()
+{
+    int id, b;
+
+    printf("\n--- Search Booking ---\n");
+    printf("Enter Booking ID: ");
+    scanf("%d", &id);
+
+    b = findbooking(id);
+    if (b == -1)
+        printf("Booking not found!\n");
+    else
+        printReceipt(b);
+}
+
+void report()
+{
+    int i, p, total = 0;
+    float revenue = 0;
+
+    printf("\n=============== REPORT ===============\n");
+    printf("%-10s %-20s %-8s %-12s %s\n", "Booking", "Passenger", "Flight", "Package", "Total");
+    printf("--------------------------------------------------------------\n");
+
+    for (i = 0; i < bcount; i++)
+    {
+        if (bookingstatus[i] == 1)
+        {
+            p = findPassenger(bookingpax[i]);
+            printf("%-10d %-20s %-8d %-12s Rs %.2f\n", bookingId[i], (p != -1) ? paxName[p] : "N/A",
+                   bookingflight[i], pkgName[bookingpkg[i]], bookingtotal[i]);
+            total++;
+            revenue = revenue + bookingtotal[i];
+        }
+    }
+
+    printf("--------------------------------------------------------------\n");
+    printf("Total Bookings : %d\n", total);
+    printf("Total Revenue  : Rs %.2f\n", revenue);
+}
+
+void searchmenu()
+{
+    int choice;
+    do
+    {
+        printf("\n--- Search Menu ---\n");
+        printf("1. Search Flight\n2. Search Passenger\n3. Search Booking\n0. Back to Main Menu\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Search Flight - coming soon\n");   // Zakai: searchflight();
+            break;
+        case 2:
+            printf("Search Passenger - coming soon\n"); // Ahmed: searchPassenger();
+            break;
+        case 3:
+            searchbooking();
+            break;
+        case 0:
+            printf("Returning to Main Menu...\n");
+            break;
+        default:
+            printf("Invalid choice! Please try again.\n");
+        }
+    } while (choice != 0);
+}
+//Hassan Asif Day 5 end
+
+//Hassan Asif Day 6 start
+void savebookings()
+{
+    FILE *fp;
+    fp = fopen("bookings.txt", "w");
+    if (fp == NULL)
+    {
+        printf("Error saving bookings!\n");
+        return;
+    }
+    for (int i = 0; i < bcount; i++)
+    {
+        fprintf(fp, "%d %d %d %d %d %d %.2f %.2f %.2f %.2f %.2f %d\n",
+                bookingId[i], bookingpax[i], bookingflight[i], bookingpkg[i],
+                bookingrow[i], bookingcol[i], bookingweight[i], bookingdiscount[i],
+                bookingfare[i], bookingfee[i], bookingtotal[i], bookingstatus[i]);
+    }
+    fclose(fp);
+}
+
+void loadbookings()
+{
+    FILE *fp;
+    int f;
+    fp = fopen("bookings.txt", "r");
+    if (fp == NULL)
+        return;
+
+    while (bcount < 200 &&
+           fscanf(fp, "%d %d %d %d %d %d %f %f %f %f %f %d",
+                  &bookingId[bcount], &bookingpax[bcount], &bookingflight[bcount], &bookingpkg[bcount],
+                  &bookingrow[bcount], &bookingcol[bcount], &bookingweight[bcount], &bookingdiscount[bcount],
+                  &bookingfare[bcount], &bookingfee[bcount], &bookingtotal[bcount], &bookingstatus[bcount]) == 12)
+    {
+        if (bookingstatus[bcount] == 1)
+        {
+            f = findflight(bookingflight[bcount]);
+            if (f != -1)
+                seats[f][bookingrow[bcount]][bookingcol[bcount]] = 1;   // seat booked again
+        }
+        bcount++;
+    }
+    fclose(fp);
+}
+//Hassan Asif Day 6 end
+
+
+
+
 void showmenu()
 {
     printf("====MAIN MENU====\n");
@@ -793,6 +949,7 @@ int main()
     if (login() == 0)
         return 0;
     loadcounters();
+        loadbookings();   // Day 6 Hassan Asif
     do
     {
 
@@ -809,27 +966,31 @@ int main()
             passengerMenu();
             saveCounters();
             break; // Ahmed Day 1
-        case 3:
+                case 3:
             bookticket();
             saveCounters();
-            break; // Hassan Asif Day 3
-        case 4:
-            printf("Cancel Booking - coming soon\n");
+            savebookings();
             break;
+        case 4:
+            cancelbooking();
+            savebookings();
+            break; // Hassan Asif Day 5
         case 5:
             seatmenu();
-            break; // Hassan Zakai Day 3
+            savebookings();
+            break;
         case 6:
-            printf("Search - coming soon\n");
-            break;
+            searchmenu();
+            break; // Hassan Asif Day 5
         case 7:
-            printf("Report - coming soon\n");
-            break;
+            report();
+            break; // Hassan Asif Day 5
         case 8:
             showPackages();
             break; // Ahmed Day 3
         case 0:
             saveCounters();
+            savebookings();
             printf("Goodbye!\n");
             break;
         default:
