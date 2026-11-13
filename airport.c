@@ -612,31 +612,143 @@ void showPackages()
 
     printf("\nExcess baggage: Rs 500/kg Domestic, Rs 1000/kg International\n");
 
-    // Temporary Fare Test
+    /*Temporary Fare Test
 
-    // float base, discount, finalFare;
-    // int age, pkg;
+    float base, discount, finalFare;
+    int age, pkg;
 
-    // printf("\n========== FARE CALCULATOR ==========\n");
+    printf("\n========== FARE CALCULATOR ==========\n");
 
-    // printf("Enter Base Fare: ");
-    // scanf("%f", &base);
+    printf("Enter Base Fare: ");
+    scanf("%f", &base);
 
-    // printf("Enter Age: ");
-    // scanf("%d", &age);
+    printf("Enter Age: ");
+    scanf("%d", &age);
 
-    // pkg = choosePackage();
+    pkg = choosePackage();
 
-    // calculateFare(base, pkg, age, &discount, &finalFare);
+    calculateFare(base, pkg, age, &discount, &finalFare);
 
-    // printf("\nDiscount: Rs %.2f\n", discount);
-    // printf("Final Fare: Rs %.2f\n", finalFare);
+    printf("\nDiscount: Rs %.2f\n", discount);
+    printf("Final Fare: Rs %.2f\n", finalFare);
 
-    // Deleted Temp fare test on Ahmed Day 4
+    Deleted Temp fare test on Ahmed Day 4 */
 
 // Ahmed Day 4 End
 }
 // Ahmed Day 3 End
+
+// Ahmed Day 5 Start
+void searchPassenger()
+{
+    int choice, id, i;
+    int found = 0;
+    char text[50];
+
+    printf("\n--- Search Passenger ---\n");
+    printf("1. By ID\n");
+    printf("2. By Name\n");
+    printf("3. By CNIC\n");
+    printf("Enter choice: ");
+    scanf("%d", &choice);
+
+    if (choice == 1)
+    {
+        printf("Enter Passenger ID: ");
+        scanf("%d", &id);
+
+        i = findPassenger(id);
+
+        if (i != -1)
+        {
+            printf("\n%d | %s | %s | %d | %s\n",
+                   paxID[i], paxName[i], paxCnic[i],
+                   paxAge[i], catName[getCategory(paxAge[i])]);
+
+            found = 1;
+        }
+    }
+    else if (choice == 2 || choice == 3)
+    {
+        printf("Enter Name / CNIC: ");
+        scanf(" %49[^\n]", text);
+
+        for (i = 0; i < pCount; i++)
+        {
+            if ((choice == 2 && strcmp(paxName[i], text) == 0) ||
+                (choice == 3 && strcmp(paxCnic[i], text) == 0))
+            {
+                printf("\n%d | %s | %s | %d | %s\n",
+                       paxID[i], paxName[i], paxCnic[i],
+                       paxAge[i], catName[getCategory(paxAge[i])]);
+
+                found = 1;
+            }
+        }
+    }
+    else
+    {
+        printf("Invalid choice!\n");
+        return;
+    }
+
+    if (found == 0)
+    {
+        printf("No passenger found.\n");
+    }
+}
+// Ahmed Day 5 End
+
+// Ahmed Day 6 Start
+void savepassengers()
+{
+    FILE *fp;
+
+    fp = fopen("passengers.txt", "w");
+
+    if (fp == NULL)
+    {
+        return;
+    }
+
+    for (int i = 0; i < pCount; i++)
+    {
+        fprintf(fp, "%d|%s|%s|%d\n",
+                paxID[i], paxName[i], paxCnic[i], paxAge[i]);
+    }
+
+    fclose(fp);
+}
+void loadpassengers()
+{
+    FILE *fp;
+
+    fp = fopen("passengers.txt", "r");
+
+    if (fp == NULL)
+    {
+        return;
+    }
+
+    while (pCount < 100 &&
+           fscanf(fp, "%d|%49[^|]|%19[^|]|%d",
+                  &paxID[pCount],
+                  paxName[pCount],
+                  paxCnic[pCount],
+                  &paxAge[pCount]) == 4)
+    {
+        if (paxID[pCount] >= nextPaxId)
+        {
+            nextPaxId = paxID[pCount] + 1;
+        }
+
+        pCount++;
+    }
+
+    fclose(fp);
+}
+// Ahmed Day 6 End
+
 void passengerMenu()
 {
     int choice;
