@@ -10,7 +10,7 @@ int login()
     do
     {
         printf("Enter PIN: ");
-        scanf("%d", &pass);
+        if (scanf("%d", &pass) != 1) { scanf("%*s"); pass = -1; }
         attempt++;
 
         if (pass != pin)
@@ -53,7 +53,7 @@ void addflight()
     do
     {
         printf("Enter Fare: ");
-        scanf("%f", &flightfares[fcount]);
+                if (scanf("%f", &flightfares[fcount]) != 1) { scanf("%*s"); flightfares[fcount] = -1; }
         if (flightfares[fcount] <= 0)
             printf("Fare must be positive. Please try again.\n");
     } while (flightfares[fcount] <= 0);
@@ -61,7 +61,7 @@ void addflight()
     do
     {
         printf("Enter Type (1 for Domestic / 2 for International): ");
-        scanf("%d", &flighttypes[fcount]);
+                if (scanf("%d", &flighttypes[fcount]) != 1) { scanf("%*s"); flighttypes[fcount] = -1; }
         if (flighttypes[fcount] != 1 && flighttypes[fcount] != 2)
             printf("Invalid type. Please enter 1 for Domestic or 2 for International.\n");
     } while (flighttypes[fcount] != 1 && flighttypes[fcount] != 2);
@@ -117,7 +117,7 @@ void updateflight()
     int id, i;
     printf("\n--- Update Flight Details ---\n");
     printf("Enter Flight ID to Update: ");
-    scanf("%d", &id);
+        if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
     i = findflight(id);
     if (i == -1)
     {
@@ -133,7 +133,7 @@ void updateflight()
     do
     {
         printf("Enter New Fare: ");
-        scanf("%f", &flightfares[i]);
+                if (scanf("%f", &flightfares[i]) != 1) { scanf("%*s"); flightfares[i] = -1; }
         if (flightfares[i] <= 0)
         {
             printf("Fare must be positive. Please try again.\n");
@@ -143,7 +143,7 @@ void updateflight()
     do
     {
         printf("Enter New Type (1 = Domestic, 2 = International): ");
-        scanf("%d", &flighttypes[i]);
+                if (scanf("%d", &flighttypes[i]) != 1) { scanf("%*s"); flighttypes[i] = -1; }
         if (flighttypes[i] != 1 && flighttypes[i] != 2)
         {
             printf("Invalid type. Please enter 1 for Domestic or 2 for International.\n");
@@ -152,17 +152,22 @@ void updateflight()
 
     printf("\nFlight Updated Successfully!\n");
 }
-
+int countfreeseats(int f);
 void deleteflight()
 {
     int id, i, j;
     printf("\n--- Delete Flight ---\n");
     printf("Enter Flight ID to delete: ");
-    scanf("%d", &id);
+        if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
     i = findflight(id);
     if (i == -1)
     {
         printf("Flight Not Found!\n");
+        return;  
+    }
+        if (countfreeseats(i) < 40)
+    {
+        printf("Cannot delete! This flight has bookings.\n");
         return;
     }
     for (j = i; j < fcount - 1; j++)
@@ -224,7 +229,7 @@ void allocateseat(int f, int *row, int *col){
 
     while(1){
         printf("\nEnter Row (1-10): ");
-        scanf("%d", &r);
+                if (scanf("%d", &r) != 1) { scanf("%*s"); r = -1; }
         printf("\nEnter Seats (A-D): ");
         scanf(" %c", &c);
 
@@ -264,13 +269,13 @@ void seatmenu(){
         printf("2. Change Seat\n");
         printf("0. Back to Main Menu\n");
         printf("Enter choice: ");
-        scanf("%d", &choice);
+                if (scanf("%d", &choice) != 1) { scanf("%*s"); choice = -1; }
 
         switch(choice){
             case 1:{
                 int id, f;
                 printf("Enter Flight ID: ");
-                scanf("%d", &id);
+                                if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
                 f = findflight(id);
                 if(f == -1){
                     printf("Flight Not Found!\n");
@@ -302,12 +307,12 @@ void searchflight(){
     printf("1. By Flight ID\n");
     printf("2. By Destination\n");
     printf("Enter choice: ");
-    scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1) { scanf("%*s"); choice = -1; }
 
     switch(choice){
         case 1:
         printf("Enter Flight ID: ");
-        scanf("%d", &id);
+                if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
         i = findflight(id);
         if(i != -1){
             printf("ID: %d | Destination: %s | Date: %s | Fare: %.2f | Type: %s | Free Seats: %d\n", flightids[i], destinations[i], flightdates[i], flightfares[i], (flighttypes[i] == 1) ? "Domestic" : "International", countfreeseats(i));
@@ -378,7 +383,7 @@ void flightmenu()
         printf("\n--- Flight Management Menu ---\n");
         printf("1. Add Flight\n2. View Flights\n3. Update Flight\n4. Delete Flight\n0. Back to Main Menu\n");
         printf("Enter choice: ");
-        scanf("%d", &choice);
+              if (scanf("%d", &choice) != 1) { scanf("%*s"); choice = -1; }
 
         switch (choice)
         {
@@ -435,7 +440,7 @@ void addPassenger()
     do
     {
         printf("Enter Age: ");
-        scanf("%d", &paxAge[pCount]);
+              if (scanf("%d", &paxAge[pCount]) != 1) { scanf("%*s"); paxAge[pCount] = -1; }
 
         if (paxAge[pCount] < 1 || paxAge[pCount] > 120)
             printf("Invalid age! Please enter age between 1 and 120.\n");
@@ -503,7 +508,7 @@ void updatePassenger()
 
     printf("\n--- Update Passenger ---\n");
     printf("Enter Passenger ID: ");
-    scanf("%d", &id);
+        if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
 
     i = findPassenger(id);
 
@@ -522,7 +527,7 @@ void updatePassenger()
     do
     {
         printf("Enter New Age: ");
-        scanf("%d", &paxAge[i]);
+                if (scanf("%d", &paxAge[i]) != 1) { scanf("%*s"); paxAge[i] = -1; }
 
         if (paxAge[i] < 1 || paxAge[i] > 120)
             printf("Invalid age! Please enter age between 1 and 120.\n");
@@ -555,7 +560,7 @@ int choosePackage()
     do
     {
         printf("Enter package (1-3): ");
-        scanf("%d", &pkg);
+                if (scanf("%d", &pkg) != 1) { scanf("%*s"); pkg = -1; }
 
         if (pkg < 1 || pkg > 3)
             printf("Invalid package!\n");
@@ -650,12 +655,12 @@ void searchPassenger()
     printf("2. By Name\n");
     printf("3. By CNIC\n");
     printf("Enter choice: ");
-    scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1) { scanf("%*s"); choice = -1; }
 
     if (choice == 1)
     {
         printf("Enter Passenger ID: ");
-        scanf("%d", &id);
+                if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
 
         i = findPassenger(id);
 
@@ -761,7 +766,7 @@ void passengerMenu()
         printf("3. Update Passenger\n");
         printf("0. Back to Main Menu\n");
         printf("Enter choice: ");
-        scanf("%d", &choice);
+                if (scanf("%d", &choice) != 1) { scanf("%*s"); choice = -1; }
 
         switch (choice)
         {
@@ -865,7 +870,7 @@ if(pCount==0 || fcount==0){
     return ;
 }
 printf("Enter Passenger ID: ");
-scanf("%d" , &pid);
+if (scanf("%d", &pid) != 1) { scanf("%*s"); pid = -1; }
 p  = findPassenger(pid);
 if(p==-1){
     printf("Passenger not found!\n");
@@ -874,7 +879,7 @@ if(p==-1){
 printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catName[getCategory(paxAge[p])]);
 // flight input
     printf("Enter Flight ID: ");
-    scanf("%d" , &fid);
+    if (scanf("%d", &fid) != 1) { scanf("%*s"); fid = -1; }
     f = findflight(fid);
     if(f==-1){
         printf("Flight not found!\n");
@@ -900,7 +905,7 @@ printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catNam
     // Day 4: baggage
     do{
         printf("Enter baggage weight (kg): ");
-        scanf("%f", &weight);
+        if (scanf("%f", &weight) != 1) { scanf("%*s"); weight = -1; }
         if(weight < 0)
             printf("Weight cannot be negative!\n");
     } while(weight < 0);
@@ -938,7 +943,8 @@ void changeseat() {
     int id, b = -1, f, oldrow, oldcol;
     printf("\n--- Change Seat ---\n");
     printf("Enter Booking ID: ");
-    scanf("%d", &id);
+       if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
+   
 
     for (int i = 0; i < bcount; i++) {
         if (bookingId[i] == id && bookingstatus[i] == 1) {
@@ -986,7 +992,7 @@ void cancelbooking()
 
     printf("\n--- Cancel Booking ---\n");
     printf("Enter Booking ID: ");
-    scanf("%d", &id);
+    if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
 
     b = findbooking(id);
     if (b == -1 || bookingstatus[b] == 0)
@@ -1010,7 +1016,7 @@ void searchbooking()
 
     printf("\n--- Search Booking ---\n");
     printf("Enter Booking ID: ");
-    scanf("%d", &id);
+    if (scanf("%d", &id) != 1) { scanf("%*s"); id = -1; }
 
     b = findbooking(id);
     if (b == -1)
@@ -1053,18 +1059,18 @@ void searchmenu()
         printf("\n--- Search Menu ---\n");
         printf("1. Search Flight\n2. Search Passenger\n3. Search Booking\n0. Back to Main Menu\n");
         printf("Enter choice: ");
-        scanf("%d", &choice);
+         if (scanf("%d", &choice) != 1) { scanf("%*s"); choice = -1; }
 
         switch (choice)
         {
         case 1:
-            printf("Search Flight - coming soon\n");   // Zakai: searchflight();
+            searchflight();      // Zakai
             break;
         case 2:
-            printf("Search Passenger - coming soon\n"); // Ahmed: searchPassenger();
+            searchPassenger();   // Ahmed
             break;
         case 3:
-            searchbooking();
+            searchbooking();     // Asif
             break;
         case 0:
             printf("Returning to Main Menu...\n");
@@ -1130,6 +1136,9 @@ void showmenu()
     printf("====MAIN MENU====\n");
     printf("1. Manage Flights\n2. Manage Passengers\n3. Book Ticket\n4. Cancel Booking\n5. Seat Allocation\n6. Search\n7. Report\n8. Packages & Categories\n0. Exit\n");
 }
+
+
+
 int main()
 {
     int choice;
@@ -1138,48 +1147,57 @@ int main()
 
     if (login() == 0)
         return 0;
+
     loadcounters();
-        loadbookings();   // Day 6 Hassan Asif
+    loadflights();      // Zakai Day 6
+    loadpassengers();   // Ahmed Day 6
+    loadbookings();     // Asif Day 6 (sab se aakhir mein)
+
     do
     {
-
         showmenu();
         printf("Enter choice: ");
-        scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1) {
+        scanf("%*s"); choice = -1;
+             }
         switch (choice)
         {
         case 1:
             flightmenu();
             saveCounters();
-            break; // Hassan Zakai Day 1
+            saveflights();
+            break; // Hassan Zakai
         case 2:
             passengerMenu();
             saveCounters();
-            break; // Ahmed Day 1
-                case 3:
+            savepassengers();
+            break; // Ahmed
+        case 3:
             bookticket();
             saveCounters();
             savebookings();
-            break;
+            break; // Hassan Asif
         case 4:
             cancelbooking();
             savebookings();
-            break; // Hassan Asif Day 5
+            break; // Hassan Asif
         case 5:
             seatmenu();
             savebookings();
-            break;
+            break; // Hassan Zakai
         case 6:
             searchmenu();
-            break; // Hassan Asif Day 5
+            break; // Hassan Asif
         case 7:
             report();
-            break; // Hassan Asif Day 5
+            break; // Hassan Asif
         case 8:
             showPackages();
-            break; // Ahmed Day 3
+            break; // Ahmed
         case 0:
             saveCounters();
+            saveflights();
+            savepassengers();
             savebookings();
             printf("Goodbye!\n");
             break;
