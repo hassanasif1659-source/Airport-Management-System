@@ -833,6 +833,10 @@ void printReceipt(int b)
 {
     int p = findPassenger(bookingpax[b]);
     int f = findflight(bookingflight[b]);
+    if (p == -1 || f == -1) {
+        printf("Error: Passenger or Flight record missing for this booking!\n");
+        return;
+    }
 
     printf("\n========== TICKET RECEIPT ==========\n");
     printf("Booking ID   : %d\n", bookingId[b]);
@@ -936,6 +940,15 @@ printf("Passenger: %s | Age: %d | Category: %s\n", paxName[p], paxAge[p], catNam
 // Hassan Zakai Day 4 (change seat)
 void changeseat() {
     int id, b = -1, f, oldrow, oldcol;
+        if (f == -1) {
+        printf("Flight not found!\n");
+        return;
+    }
+    if (countfreeseats(f) == 0) {
+        printf("No free seats available on this flight to change!\n");
+        return;
+    }
+
     printf("\n--- Change Seat ---\n");
     printf("Enter Booking ID: ");
     scanf("%d", &id);
@@ -956,7 +969,6 @@ void changeseat() {
     
     oldrow = bookingrow[b];
     oldcol = bookingcol[b];
-
     printf("Current seat: %d%c\n", oldrow + 1, 'A' + oldcol);
 
     allocateseat(f, &bookingrow[b], &bookingcol[b]);
@@ -1057,11 +1069,11 @@ void searchmenu()
 
         switch (choice)
         {
-        case 1:
-            printf("Search Flight - coming soon\n");   // Zakai: searchflight();
+         case 1:
+            searchflight();    
             break;
         case 2:
-            printf("Search Passenger - coming soon\n"); // Ahmed: searchPassenger();
+            searchPassenger();  
             break;
         case 3:
             searchbooking();
@@ -1139,7 +1151,9 @@ int main()
     if (login() == 0)
         return 0;
     loadcounters();
-        loadbookings();   // Day 6 Hassan Asif
+    loadflights();
+    loadpassengers();
+    loadbookings();   // Day 6 Hassan Asif
     do
     {
 
@@ -1150,10 +1164,12 @@ int main()
         {
         case 1:
             flightmenu();
+            saveflights();
             saveCounters();
             break; // Hassan Zakai Day 1
         case 2:
             passengerMenu();
+            savepassengers();
             saveCounters();
             break; // Ahmed Day 1
                 case 3:
@@ -1179,6 +1195,8 @@ int main()
             showPackages();
             break; // Ahmed Day 3
         case 0:
+            saveflights();
+            savepassengers();
             saveCounters();
             savebookings();
             printf("Goodbye!\n");
